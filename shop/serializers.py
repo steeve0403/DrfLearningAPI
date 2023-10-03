@@ -5,20 +5,26 @@ from shop.models import Category, Product, Article
 
 
 
-class ProductSerialiser(serializers.ModelSerializer):
-
-    class Meta:
-        model = Product
-        fields = ['id', 'date_created', 'date_updated', 'name', 'category']
-
 class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
         fields = ['id', 'date_created', 'date_updated', 'name', 'price', 'product']
 
+class ProductSerializer(serializers.ModelSerializer):
 
-class CategorySerializer(serializers.ModelSerializer):
+    articles = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ['id', 'date_created', 'date_updated', 'name', 'category', 'articles']
+
+    def get_articles(self, instance):
+        queryset = instance.articles.filter(active=True)
+        serializer = ArticleSerializer(queryset, many=True)
+        return serializer.data
+
+class CategorySerialiser(serializers.ModelSerializer):
 
     products = serializers.SerializerMethodField()
 
@@ -28,5 +34,5 @@ class CategorySerializer(serializers.ModelSerializer):
 
     def get_products(self, instance):
         queryset = instance.products.filter(active=True)
-        serializer = ProductSerialiser(queryset, many=True)
+        serializer = ProductSerializer(queryset, many=True)
         return serializer.data

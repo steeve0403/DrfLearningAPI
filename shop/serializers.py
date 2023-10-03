@@ -24,7 +24,7 @@ class ProductSerializer(serializers.ModelSerializer):
         serializer = ArticleSerializer(queryset, many=True)
         return serializer.data
 
-class CategorySerialiser(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
 
     products = serializers.SerializerMethodField()
 

@@ -23,8 +23,13 @@ class ProductSerializer(serializers.ModelSerializer):
         queryset = instance.articles.filter(active=True)
         serializer = ArticleSerializer(queryset, many=True)
         return serializer.data
+class CategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'date_created', 'date_updated', 'name']
 
-class CategorySerializer(serializers.ModelSerializer):
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
 
     products = serializers.SerializerMethodField()
 
